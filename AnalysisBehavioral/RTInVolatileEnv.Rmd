@@ -1,0 +1,86 @@
+---
+title: "BehavioralAnalysisRT"
+author: "Jonathan"
+date: "2024-06-03"
+output: html_document
+---
+```{r}
+
+library(tidyverse)
+library(dplyr)
+library(reshape2)
+
+
+```
+
+```{r}
+# Loading data
+df1 <- read.csv("../data_behavioral/1_updated_behav.csv")
+df2 <- read.csv("../data_behavioral/2_updated_behav.csv")
+
+```
+
+```{r}
+# Creating correct reaction time
+df1$RT <- (df1$ReactionTime - df1$PredOnset)
+df2$RT <- (df2$ReactionTime - df2$PredOnset)
+
+```
+
+
+
+```{r}
+# Isolating volatile part and stable part
+df1_vol <- df1[51:100,]
+df2_vol <- df2[51:100,]
+
+df1_stb <- df1[1:50,]
+df2_stb <- df2[1:50,]
+
+```
+
+```{r}
+# Takind average reaction time for volatile environment
+avg_RT1_vol <- mean(df1_vol$RT)
+avg_RT2_vol <- mean(df2_vol$RT)
+
+# Taking average reaction time for stable environment
+avg_RT1_stb <- mean(df1_stb$RT)
+avg_RT2_stb <- mean(df2_stb$RT)
+
+```
+
+
+```{r}
+# Creating dataframe with only the interesting columns
+df_bx <- tibble(RT1_vol = df1_vol$RT, RT1_stb = df1_stb$RT, RT2_vol = df2_vol$RT, RT2_stb = df2_stb$RT)
+
+df_bx <- na.omit(df_bx)
+```
+
+```{r}
+
+df_long <- melt(df_bx, measure.vars = c("RT1_vol", "RT1_stb", "RT2_vol", "RT2_stb"))
+
+```
+
+
+
+```{r}
+
+# Creating the scatter plot with standard errors
+ggplot(df_long, aes(x = variable, y = value, fill = variable)) +
+  geom_boxplot()
+  labs(x = "Reaction Time Columns", y = "Reaction Times") +
+  theme_minimal()
+```
+
+
+
+
+
+
+
+
+
+

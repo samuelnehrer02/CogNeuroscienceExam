@@ -1,0 +1,98 @@
+---
+title: "BehavioralAnalysisRTAfterIncorrect"
+author: "Jonathan"
+date: "2024-06-03"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(reshape2)
+
+```
+
+
+```{r}
+# Loading data
+df1 <- read.csv("../data_behavioral/1_updated_behav.csv")
+df2 <- read.csv("../data_behavioral/2_updated_behav.csv")
+
+```
+
+```{r}
+# Creating correct reaction time
+df1$RT <- (df1$ReactionTime - df1$PredOnset)
+df2$RT <- (df2$ReactionTime - df2$PredOnset)
+```
+
+```{r}
+# For df1
+IncList1 <- df1[df1$Correct == 0,]
+NextTrialInd1 <- IncList1$Trial + 1
+NextTrialInd1 <- NextTrialInd1[NextTrialInd1 <= nrow(df1)]
+
+NextTrials1 = df1[NextTrialInd1,]
+```
+
+```{r}
+# For df2
+IncList2 <- df2[df2$Correct == 0,]
+NextTrialInd2 <- IncList2$Trial + 1
+NextTrialInd2 <- NextTrialInd2[NextTrialInd2 <= nrow(df2)]
+
+NextTrials2 = df2[NextTrialInd2,]
+```
+
+```{r}
+# Creating dataframe for all other trials
+all_trials_indices1 <- df1$Trial
+
+# Step 2: Use setdiff to find the trials that are not in NextTrialInd1
+other_trial_indices1 <- setdiff(all_trials_indices1, NextTrialInd1)
+
+# Step 3: Subset df1 using these indices
+OtherTrial1 <- df1[df1$Trial %in% other_trial_indices1, ]
+```
+
+```{r}
+# Step 1: Identify the indices of all trials
+all_trials_indices2 <- df2$Trial
+
+# Step 2: Use setdiff to find the trials that are not in NextTrialInd2
+other_trial_indices2 <- setdiff(all_trials_indices2, NextTrialInd2)
+
+# Step 3: Subset df2 using these indices
+OtherTrial2 <- df2[df2$Trial %in% other_trial_indices2, ]
+```
+
+```{r}
+NextTrials1$Group <- "AfterInc1"
+OtherTrial1$Group <- "OtherTrials1"
+NextTrials2$Group <- "AfterInc2"
+OtherTrial2$Group <- "OtherTrials2"
+```
+
+```{r}
+# Creating data frame with all
+combined_data <- rbind(NextTrials1, OtherTrial1, NextTrials2, OtherTrial2)
+
+combined_data$Group <- factor(combined_data$Group, levels = c("AfterInc1", "OtherTrials1", "AfterInc2", "OtherTrials2"))
+
+
+```
+
+```{r}
+ggplot(combined_data, aes(x = Group, y = RT, fill = Group)) +
+  geom_boxplot() +
+  labs(title = "Reaction Times by Trial Type",
+       x = "Trial Type",
+       y = "Reaction Time") +A
+  theme_minimal()
+
+```
+
+
+
+
+
