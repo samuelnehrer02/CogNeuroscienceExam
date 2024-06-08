@@ -53,14 +53,17 @@ avg_RT2_stb <- mean(df2_stb$RT)
 
 ```{r}
 # Creating dataframe with only the interesting columns
-df_bx <- tibble(RT1_vol = df1_vol$RT, RT1_stb = df1_stb$RT, RT2_vol = df2_vol$RT, RT2_stb = df2_stb$RT)
+df_bx <- tibble(RT_A_vol = df1_vol$RT, RT_A_stb = df1_stb$RT, RT_B_vol = df2_vol$RT, RT_B_stb = df2_stb$RT)
 
 df_bx <- na.omit(df_bx)
+
+
+
 ```
 
 ```{r}
 
-df_long <- melt(df_bx, measure.vars = c("RT1_vol", "RT1_stb", "RT2_vol", "RT2_stb"))
+df_long <- melt(df_bx, measure.vars = c("RT_A_vol", "RT_A_stb", "RT_B_vol", "RT_B_stb"))
 
 ```
 
@@ -69,17 +72,75 @@ df_long <- melt(df_bx, measure.vars = c("RT1_vol", "RT1_stb", "RT2_vol", "RT2_st
 ```{r}
 
 # Creating the scatter plot with standard errors
-ggplot(df_long, aes(x = variable, y = value, fill = variable)) +
-  geom_boxplot()
-  labs(x = "Reaction Time Columns", y = "Reaction Times") +
-  theme_minimal()
+RT_vs <- ggplot(df_long, aes(x = variable, y = value, fill = variable)) +
+  geom_boxplot() +
+  labs(title = "Reaction Times in Stable and Volatile Environment", x = "Participant and Category", y = "Reaction Time")
+  
+  
 ```
 
 
+```{r}
+
+RT_vs
+ggsave("reaction_times_plot.png", plot = RT_vs, width = 10, height = 6, units = "in")
+
+ggsave("reaction_times_plot.png", plot = plot, width = 10, height = 6, units = "in")
+
+getwd()
+```
 
 
+```{r}
+df_long <- melt(df_bx, measure.vars = c("RT1_vol", "RT1_stb", "RT2_vol", "RT2_stb"))
 
 
+```
+
+
+```{r}
+
+df_1_long <- filter(df_long, variable %in% c("RT1_stb", "RT1_vol"))
+
+df_2_long <- filter(df_long, variable %in% c("RT2_stb", "RT2_vol"))
+
+
+```
+
+```{r}
+
+modell1 <- glm(log(value) ~ variable, data = df_1_long, family = gaussian)
+
+summary(modell1)
+
+
+```
+
+```{r}
+modell2 <- glm(log(value) ~ variable, data = df_2_long, family = gaussian)
+
+summary(modell2)
+
+
+```
+
+```{r}
+
+modelg1 <- glm(value ~ variable, data = df_1_long, family = Gamma)
+
+summary(modelg1)
+
+
+```
+
+```{r}
+
+modelg2 <- glm(value ~ variable, data = df_2_long, family = Gamma)
+
+summary(modelg2)
+
+
+```
 
 
 

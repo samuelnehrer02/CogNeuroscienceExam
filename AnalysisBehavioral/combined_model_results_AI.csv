@@ -1,0 +1,8 @@
+term,estimate,std.error,statistic,p.value,Participant
+Model Participant A,,,,,
+(Intercept),3.1179,0.1872,16.6564,2.4386e-30,A
+GroupOtherTrials\_{A},-0.3328,0.2009,-1.6567,0.1008,A
+,,,,,
+Model Participant B,,,,,
+(Intercept),1.8841,0.1033,18.2353,4.1705e-33,B
+GroupOtherTrials\_{B},0.0928,0.1247,0.7446,0.4583,B

@@ -1,0 +1,8 @@
+term,estimate,std.error,statistic,p.value,participant
+Model Particpant A,,,,,
+(Intercept),3.0493,0.1010,30.2019,8.14E-51,A
+variableRT\_{A}\_{stb},-0.3990,0.1338,-2.983,0.0036,A
+,,,,,
+Model Particpant B,,,,,
+(Intercept),1.9137,0.0811,23.5944,9.69E-42,B
+variableRT\_{B}\_{stb},0.0774,0.1170,0.6614,0.5099,B
