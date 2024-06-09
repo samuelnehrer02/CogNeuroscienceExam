@@ -92,7 +92,7 @@ getwd()
 
 
 ```{r}
-df_long <- melt(df_bx, measure.vars = c("RT1_vol", "RT1_stb", "RT2_vol", "RT2_stb"))
+df_long <- melt(df_bx, measure.vars = c("RT_A_stb", "RT_A_vol", "RT_B_stb", "RT_B_vol"))
 
 
 ```
@@ -100,9 +100,9 @@ df_long <- melt(df_bx, measure.vars = c("RT1_vol", "RT1_stb", "RT2_vol", "RT2_st
 
 ```{r}
 
-df_1_long <- filter(df_long, variable %in% c("RT1_stb", "RT1_vol"))
+df_1_long <- filter(df_long, variable %in% c("RT_A_stb", "RT_A_vol"))
 
-df_2_long <- filter(df_long, variable %in% c("RT2_stb", "RT2_vol"))
+df_2_long <- filter(df_long, variable %in% c("RT_B_stb", "RT_B_vol"))
 
 
 ```
@@ -141,6 +141,30 @@ summary(modelg2)
 
 
 ```
+
+```{r}
+tidy_modelg1 <- tidy(modelg1)
+tidy_modelg2 <- tidy(modelg2)
+
+tidy_modelg1$model <- "modelg1"
+tidy_modelg2$model <- "modelg2"
+
+combined_results <- rbind(tidy_modelg1, tidy_modelg2)
+
+write.csv(combined_results, "combined_model_results.csv", row.names = FALSE)
+```
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

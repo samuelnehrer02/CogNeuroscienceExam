@@ -85,14 +85,22 @@ combined_data$Group <- factor(combined_data$Group, levels = c("RT_AfterIncorrect
 ```
 
 ```{r}
-ggplot(combined_data, aes(x = Group, y = RT, fill = Group)) +
+AI_plot <- ggplot(combined_data, aes(x = Group, y = RT, fill = Group)) +
   geom_boxplot() +
   labs(title = "",
        x = "Participant and Category",
-       y = "Reaction Time") +
-  theme_minimal()
+       y = "Reaction Time")
 
 ```
+
+```{r}
+
+ggsave("reaction_times_plot.png", plot = AI_plot, width = 10, height = 6, units = "in")
+
+
+```
+
+
 
 ```{r}
 
@@ -141,6 +149,29 @@ glm_modelp2 <- glm(RT ~ Group, data = df_comb_2, family = Gamma)
 
 summary(glm_modelp2)
 ```
+
+```{r}
+
+tidy_modelg1 <- tidy(glm_modelp1)
+tidy_modelg2 <- tidy(glm_modelp2)
+
+tidy_modelg1$model <- "modelg1"
+tidy_modelg2$model <- "modelg2"
+
+combined_results <- rbind(tidy_modelg1, tidy_modelg2)
+
+write.csv(combined_results, "combined_model_results_AI.csv", row.names = FALSE)
+
+
+```
+
+
+
+
+
+
+
+
 
 
 
